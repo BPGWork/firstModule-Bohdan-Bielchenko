@@ -65,7 +65,7 @@ public class Runner {
     /* Documentation */
     private static void printHelp() {
         System.out.println("ENCRYPT -> Encode information ( ENCRYPT <path> <key> )");
-        System.out.println("DECRYPT -> Decode information ( ENCRYPT <path> <key> )");
+        System.out.println("DECRYPT -> Decode information ( DECRYPT <path> <key> )");
         System.out.println("BRUTE_FORCE -> Searches for the key and decrypts the information");
         System.out.println("Path to the file for brute ( BRUTE_FORCE <path> [verifyPath]");
         System.out.println("If you don't have an analytical file");

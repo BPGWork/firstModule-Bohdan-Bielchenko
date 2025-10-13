@@ -2,6 +2,7 @@ package com.ua.rush.CaesarCipher;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -13,7 +14,9 @@ class FileService {
         String textArray = null;
         try {
             textArray = Files.readString(path, StandardCharsets.UTF_8);
-        }  catch (NoSuchFileException e) {
+        } catch (AccessDeniedException e) {
+            throw new RuntimeException("Field not found");
+        } catch (NoSuchFileException e) {
             throw new RuntimeException("Field not found");
         } catch (IOException e) {
             e.printStackTrace();

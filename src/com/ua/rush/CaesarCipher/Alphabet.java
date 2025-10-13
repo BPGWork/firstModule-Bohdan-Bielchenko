@@ -1,7 +1,7 @@
 package com.ua.rush.CaesarCipher;
 
 /* This Enum stores different alphabets for encoding and decoding */
-public enum Alphabet {
+enum Alphabet {
     /* English alphabet */
     ENG(new String[]{
             "a", "b", "c", "d", "e", "f", "g",
