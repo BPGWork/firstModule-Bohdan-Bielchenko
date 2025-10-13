@@ -38,6 +38,7 @@ class CLI {
                         bruteInfo();
                     }
                     case 0 -> isWork = false;
+                    default -> System.out.println("Wrong choice.\n");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("The key must be an integer.\n");
