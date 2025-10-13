@@ -2,9 +2,9 @@ This program encrypts, decrypts and selects a key using the brute force method.
 Encryption is performed using the Caesar cipher. The program automatically determines the element alphabet.
 Supports Ukrainian, English alphabets and various characters.
 The program can be run via arguments:
-1. Commands <path> <key> -> for encrypting and decrypting information.
-2. BRUTE_FORSE <path> [verifyPath] -> for decrypting and obtaining the key, if there is a verification file.
-3. BRUTE_FORSE <path> -> for decrypting and obtaining the key, using the method of verifying information by reading.
+1. Commands [path] [key] -> for encrypting and decrypting information.
+2. BRUTE_FORSE [path] [verifyPath] -> for decrypting and obtaining the key, if there is a verification file.
+3. BRUTE_FORSE [path] -> for decrypting and obtaining the key, using the method of verifying information by reading.
 4. HELP -> Command prompt and using the program.
 
 The program can be run without arguments and interact with it via the built-in interface.
