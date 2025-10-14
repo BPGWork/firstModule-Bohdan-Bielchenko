@@ -6,15 +6,25 @@ import java.util.Locale;
 import java.util.SplittableRandom;
 
 public class Runner {
-    /* Interface launch method */
-    public static void consoleInterfaceStart () {
-        CLI user = new CLI();
-        user.startProject();
+    static CaesarCipher caesarCipher = new CaesarCipher();
+    /* Coding start method */
+    public static String codingInformation (String command, Path path, int key) {
+        return caesarCipher.codingInformation(command, path, key);
+    }
+    /* Brute force method with read verification */
+    public static String[] bruteForceFile (Path path) {
+        return caesarCipher.BRUTE_FORCE(path);
+    }
+    /* Brute force method with verification via analytical file */
+    public static String[] bruteForceFile (Path path, Path filePathForStaticAnalysis) {
+        return caesarCipher.BRUTE_FORCE(path, filePathForStaticAnalysis);
     }
     /* Method run via arguments */
     public static void consoleStart (String[] args) {
-        CaesarCipher caesarCipher = new CaesarCipher();
         String cmd = args[0].trim().toUpperCase();
+
+        String newText = "";
+        String[] arrBrute = null;
 
         if (!("ENCRYPT".equals(cmd)) &&
             !("DECRYPT".equals(cmd)) && !("BRUTE_FORCE".equals(cmd)) && !("HELP".equals(cmd))) {
@@ -37,7 +47,10 @@ public class Runner {
 
                     Path path = Path.of(args[1]);
                     int key = Integer.parseInt(args[2]);
-                    caesarCipher.codingInformation(cmd, path, key);
+
+                    newText = caesarCipher.codingInformation(cmd, path, key);
+                    Path newFileName = FileService.createNameFile(path, cmd);
+                    FileService.writeFile(newFileName, newText);
                 }
                 case "BRUTE_FORCE" -> {
                     if (args.length < 2) {
@@ -45,12 +58,16 @@ public class Runner {
                         return;
                     } else if (args.length == 2) {
                         Path path = Path.of(args[1]);
-                        caesarCipher.BRUTE_FORCE(path);
+                        arrBrute = caesarCipher.BRUTE_FORCE(path);
                     } else {
                         Path path = Path.of(args[1]);
                         Path verifyPath = Path.of(args[2]);
-                        caesarCipher.BRUTE_FORCE(path, verifyPath);
+                        arrBrute = caesarCipher.BRUTE_FORCE(path, verifyPath);
                     }
+
+                    cmd += " → " + arrBrute[1];
+                    Path newFileName = FileService.createNameFile(Path.of(args[1]), cmd);
+                    FileService.writeFile(newFileName, arrBrute[0]);
                 }
             }
         } catch (NumberFormatException e) { // Key verification

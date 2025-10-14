@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /* This class interacts with user */
-class CLI {
+public class CLI {
     protected String command = null;
     protected String filePath = null;
     protected int key;
@@ -13,7 +13,7 @@ class CLI {
     protected CaesarCipher chipher = new CaesarCipher();
 
     /* Start interface */
-    protected void startProject() {
+    public void startProject() {
         Scanner scanner = new Scanner(System.in);
         boolean isWork = true;
 
@@ -66,12 +66,17 @@ class CLI {
         System.out.print("Enter the encryption key: ");
         this.key = scanner.nextInt();
 
-        chipher.codingInformation(command, Path.of(filePath), key);
+        String newText = chipher.codingInformation(command, Path.of(filePath), key);
+
+        Path newFileName = FileService.createNameFile(Path.of(filePath), command.toUpperCase());
+        FileService.writeFile(newFileName, newText);
+
         System.out.println(command + " file\n");
     }
     /* Brute force */
     protected void bruteInfo() {
         Scanner scanner = new Scanner(System.in);
+        String[] arrBrute = null;
 
         System.out.print("Enter the path to the file: ");
         this.filePath = scanner.nextLine();
@@ -83,10 +88,14 @@ class CLI {
             System.out.print("Enter the path to the analytical file: ");
             String analyticalFile = scanner.nextLine();
 
-            chipher.BRUTE_FORCE(Path.of(filePath), Path.of(analyticalFile));
+            arrBrute = chipher.BRUTE_FORCE(Path.of(filePath), Path.of(analyticalFile));
         } else if (answer.equalsIgnoreCase("No")) {
-            chipher.BRUTE_FORCE(Path.of(filePath));
+            arrBrute = chipher.BRUTE_FORCE(Path.of(filePath));
         }
+
+        command += " → " + arrBrute[1];
+        Path newFileName = FileService.createNameFile(Path.of(filePath), command);
+        FileService.writeFile(newFileName, arrBrute[0]);
 
         System.out.println("BRUTE_FORCE file\n");
     }

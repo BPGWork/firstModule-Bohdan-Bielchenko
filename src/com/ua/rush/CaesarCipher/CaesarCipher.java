@@ -7,7 +7,7 @@ import java.util.Scanner;
 /* This class is used for ENCRYPT and DECRYPT text using a key */
 class CaesarCipher {
     /* File encryption/decryption by key */
-    protected void codingInformation (String command, Path path, int key) {
+    protected String codingInformation (String command, Path path, int key) {
         String text = FileService.readFile(path);
         char[] charText = convertWithString(text);
         char element;
@@ -24,8 +24,7 @@ class CaesarCipher {
             }
         }
 
-        Path newFileName = FileService.createNameFile(path, command.toUpperCase());
-        FileService.writeFile(newFileName, convertWithChar(text, encryptText));
+        return convertWithChar(text, encryptText);
     }
     /* Encrypt/Decrypt an element by key */
     private char codingElement (char element, String command, int key, Alphabet alphabet) {
@@ -40,11 +39,13 @@ class CaesarCipher {
                 }
 
                 result += i + key;
-                if (result >= alphabet.alphabetLength()) {
-                    result -= alphabet.alphabetLength();
-                }
-                if (result < 0) {
-                    result += alphabet.alphabetLength();
+                while (result < 0 || result >= alphabet.alphabetLength()) {
+                    if (result >= alphabet.alphabetLength()) {
+                        result -= alphabet.alphabetLength();
+                    }
+                    if (result < 0) {
+                        result += alphabet.alphabetLength();
+                    }
                 }
 
                 encryptSymbol = alphabet.getElemet(result);
@@ -60,18 +61,15 @@ class CaesarCipher {
         return encryptSymbol.charAt(0);
     }
     /* Brute force a file without verification */
-    protected void BRUTE_FORCE (Path path) {
+    protected String[] BRUTE_FORCE (Path path) {
         Scanner scanner = new Scanner(System.in);
 
-        String command = "BRUTE_FORCE";
+        String decryptInformation = "";
         String answer = "";
         int key = 1;
-        boolean isWork = true;
 
-        while (isWork) {
-            codingInformation("DECRYPT", path, key);
-            Path decryptFile = FileService.createNameFile(path, "DECRYPT".toUpperCase());
-            String decryptInformation = FileService.readFile(decryptFile);
+        while (true) {
+            decryptInformation = codingInformation("DECRYPT", path, key);
 
             System.out.println(decryptInformation + "\n");
             System.out.println("1 -> Yes");
@@ -80,38 +78,24 @@ class CaesarCipher {
             answer = scanner.nextLine();
 
             if (answer.equalsIgnoreCase("1")) {
-                FileService.removeFile(decryptFile);
-
-                command += " → " + key;
-                Path bruteFile = FileService.createNameFile(path, command.toUpperCase());
-                FileService.writeFile(bruteFile, decryptInformation);
-
-                isWork = false;
+                String[] arrBrute = new String[] {decryptInformation, "" + key};
+                return arrBrute;
             } else if (answer.equalsIgnoreCase("2")) {
                 key++;
             }
         }
     }
     /* Brute force file with verification */
-    protected void BRUTE_FORCE (Path path, Path filePathForStaticAnalysis) {
+    protected String[] BRUTE_FORCE (Path path, Path filePathForStaticAnalysis) {
         String analyticalInformation = FileService.readFile(filePathForStaticAnalysis);
-        String command = "BRUTE_FORCE";
+        String decryptInformation = "";
         int key = 1;
-        boolean isWork = true;
 
-        while (isWork) {
-            codingInformation("DECRYPT", path, key);
-            Path decryptFile = FileService.createNameFile(path, "DECRYPT".toUpperCase());
-            String decryptInformation = FileService.readFile(decryptFile);
-
+        while (true) {
+            decryptInformation = codingInformation("DECRYPT", path, key);
             if (analyticalInformation.equals(decryptInformation)) {
-                FileService.removeFile(decryptFile);
-
-                command += " → " + key;
-                Path bruteFile = FileService.createNameFile(path, command.toUpperCase());
-                FileService.writeFile(bruteFile, decryptInformation);
-
-                isWork = false;
+                String[] arrBrute = new String[]{decryptInformation, "" + key};
+                return arrBrute;
             } else {
                 key++;
             }
